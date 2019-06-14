@@ -1,6 +1,6 @@
 const axios = require('axios');
 const express = require('express');
-const router = express.Router()
+const bcrypt = require('bcryptjs')
 
 const { authenticate } = require('../auth/authenticate');
 const Users = require('../users/users-model')
@@ -13,6 +13,11 @@ module.exports = server => {
 
 function register(req, res) {
   // implement user registration
+
+  let user = req.body
+  const hash = bcrypt.hashSync(user.password, 8);
+  user.password = hash;
+
   Users.add(req.body)
   .then(response => {
     console.log(response)
@@ -27,6 +32,19 @@ function register(req, res) {
 
 function login(req, res) {
   // implement user login
+  let { username, password } = req.body;
+  Users.findByUsername(req.body.username)
+  .then(user => {
+    if (user && bcrypt.compareSync(password, user.password)) {
+      res.status(200).json(user)
+    }
+    else {
+      res.status(401).json('Please enter valid credentials')
+    }
+  })
+  .catch(error => {
+    res.status(500).json(error)
+  })
 }
 
 function getJokes(req, res) {
