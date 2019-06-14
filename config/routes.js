@@ -1,6 +1,9 @@
 const axios = require('axios');
+const express = require('express');
+const router = express.Router()
 
 const { authenticate } = require('../auth/authenticate');
+const Users = require('../users/users-model')
 
 module.exports = server => {
   server.post('/api/register', register);
@@ -10,6 +13,16 @@ module.exports = server => {
 
 function register(req, res) {
   // implement user registration
+  Users.add(req.body)
+  .then(response => {
+    console.log(response)
+    res.status(200).json(response)
+  })
+  .catch(error => {
+    console.log(error)
+    res.status(500).json(error)
+  })
+
 }
 
 function login(req, res) {
