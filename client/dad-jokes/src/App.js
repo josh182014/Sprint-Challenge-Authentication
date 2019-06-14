@@ -29,7 +29,6 @@ class App extends React.Component {
     axios
       .get(endpoint, requestConfig)
       .then(res => {
-        console.log(res)
         this.setState({jokes: res.data})
       })
       .catch(error => {

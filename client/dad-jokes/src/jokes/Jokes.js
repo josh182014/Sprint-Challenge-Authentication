@@ -1,9 +1,6 @@
 import React from 'react';
 
 class Jokes extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     componentDidMount() {
         this.props.getJokes()
